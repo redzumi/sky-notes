@@ -1,11 +1,3 @@
 .page__container {
   max-width: 640px;
 }
-
-.notes__level {
-  display: flex;
-  flex-direction: column;
-  max-height: 400px;
-  overflow: scroll;
-  padding-top: 25px;
-}
