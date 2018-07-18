@@ -12,12 +12,18 @@ const Note = ({ data, onNoteDelete }) => {
       <article className="media">
         <div className="media-content">
           <div className="content">
+            <div className="level">
             <p>
               <strong>{NAME}</strong> <small>{LOGIN}</small>
               <br/>
               {data.text}
             </p>
-            <button className="button" onClick={onNoteDelete}>Delete</button>
+            </div>
+            <div className="level">
+              <button className="button" onClick={onNoteDelete}>
+                <span><i className="fas fa-trash"></i> Delete</span>
+              </button>
+            </div>
           </div>
         </div>
       </article>
