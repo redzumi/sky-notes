@@ -1,11 +1,11 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-
 import { hot } from 'react-hot-loader'
+
+import Home from './pages/Home'
 
 class App extends React.Component {
     render() {
-        return (<h1>Hello World!</h1>)
+        return (<Home />)
     }
 }
 

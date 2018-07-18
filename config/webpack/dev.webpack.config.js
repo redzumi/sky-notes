@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WriteFilePlugin = require('write-file-webpack-plugin')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
     mode: 'development',
@@ -20,7 +21,11 @@ module.exports = {
             {
                 test: /\.js(x?)$/,
                 exclude: /(node_modules|bower_components)/,
-                use: 'babel-loader',
+                use: ['babel-loader'],
+            },
+            {
+                test: /\.css$/,
+                use: [MiniCssExtractPlugin.loader, 'css-loader']
             }
         ]
     },
@@ -29,7 +34,11 @@ module.exports = {
           template: path.resolve(__dirname, '../../src/index.html'),
         }),
         new WriteFilePlugin(),
-        new ProgressBarPlugin()
+        new ProgressBarPlugin(),
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css'
+        }),
     ],
     devServer: {
         contentBase: path.resolve(__dirname, '../../build'),
