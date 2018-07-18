@@ -48,19 +48,46 @@ class NotesManager extends React.Component {
     saveNotes(newNotes)
   }
 
+  saveToJSON = () => {
+    window.prompt('Copy your JSON:', JSON.stringify(this.state.notes));
+  }
+
+  loadFromJSON = () => {
+    const loadedJSON = window.prompt('Your JSON:');
+    if (loadedJSON) {
+      const notes = JSON.parse(loadedJSON);
+      this.setState({ notes: notes })
+      saveNotes(notes)
+    }
+  }
+
   render () {
     const { notes, currentLevel } = this.state
+
+    if (!notes || typeof notes !== 'object') {
+      return (<span>Ooops, something went wrong....</span>)
+    }
+
     const filteredNotes = this.filterNotesByLevel(notes, currentLevel)
+    
     return(
       <div>
         <div className="level">
           <div className="level-left">
+            <button
+              className="button" 
+              onClick={this.handleToggleNoteForm}
+            >{this.state.showNoteForm ? 'Cancel' : 'Add'}</button>
           </div>
           <div className="level-right">
-            <a
-            className="button" 
-            onClick={this.handleToggleNoteForm}
-            >{this.state.showNoteForm ? 'Cancel' : 'Add'}</a>
+            <button
+              className="button level-item" 
+              onClick={this.loadFromJSON}
+            >Load</button>
+            <button
+              className="button level-item" 
+              onClick={this.saveToJSON}
+            >Save</button>
           </div>
         </div>
         {(this.state.showNoteForm) && (

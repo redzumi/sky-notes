@@ -16,6 +16,8 @@ const Note = ({ data, onNoteDelete }) => {
             <p>
               <strong>{NAME}</strong> <small>{LOGIN}</small>
               <br/>
+              <b>{data.title}</b>
+              <br/>
               {data.text}
             </p>
             </div>
