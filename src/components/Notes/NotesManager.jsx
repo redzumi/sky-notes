@@ -5,13 +5,16 @@ import CreateNoteForm from '../Notes/CreateNoteForm'
 import { getNotes, saveNotes } from '../../helpers/db'
 import { Levels } from '../../helpers/constants'
 
-import './styles.css'
 
 class NotesManager extends React.Component {
   state = {
-    notes: getNotes(),
+    notes: [],
     currentLevel: Levels.HIGH,
     showNoteForm: false,
+  }
+
+  componentDidMount() {
+    this.setState({ notes: getNotes() })
   }
 
   handleNoteCreate = (note) => {

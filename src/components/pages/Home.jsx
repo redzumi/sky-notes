@@ -2,7 +2,6 @@ import React from 'react'
 
 import NotesManager from '../Notes/NotesManager'
 
-import './styles.css'
 
 class Home extends React.Component {
   render () {
