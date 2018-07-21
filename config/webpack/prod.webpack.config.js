@@ -7,7 +7,7 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     entry: path.resolve(__dirname, '../../src/index.jsx'),
     output: {
         path: path.resolve(__dirname, '../../build/assets'),

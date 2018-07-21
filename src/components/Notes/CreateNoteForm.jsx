@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import uuid from 'uuid/v4'
 
 import { Levels } from '../../helpers/constants'
 
@@ -8,21 +7,16 @@ class CreateNoteForm extends React.Component {
   state = {
     title: '',
     level: Levels.HIGH,
-    text: '',
-    timestamp: Date.now(),
+    text: ''
   }
 
   handleValueChange = ({ target }) => {
-    this.setState({ 
-      [target.name] : target.value, 
-      timestamp: Date.now() 
-    })
+    this.setState({ [target.name]: target.value })
   }
 
   handleFormSubmit = (e) => {
     e.preventDefault()
-    const newNote = { ...this.state, ...{ id: uuid() }}
-    this.props.onNoteCreated(newNote)
+    this.props.onNoteCreated(this.state)
   }
 
   handleFormCancel = () => {

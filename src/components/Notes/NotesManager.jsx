@@ -2,25 +2,43 @@ import React from 'react'
 
 import NotesList from '../Notes/NotesList'
 import CreateNoteForm from '../Notes/CreateNoteForm'
-import { getNotes, saveNotes } from '../../helpers/db'
+import APIClient from '../../helpers/apiClient'
 import { Levels } from '../../helpers/constants'
 
+if (!global.window.IS_SSR) {
+  require('./styles.css')
+}
+
+const API = new APIClient({
+  host: 'localhost',
+  port: 3001,
+})
 
 class NotesManager extends React.Component {
   state = {
     notes: [],
+    isFetching: true,
     currentLevel: Levels.HIGH,
     showNoteForm: false,
   }
 
   componentDidMount() {
-    this.setState({ notes: getNotes() })
+    if (window.__INITIAL_STATE__ && window.__INITIAL_STATE__.notes) {
+      this.setState({ notes: window.__INITIAL_STATE__.notes, isFetching: false })
+    } else {
+      this.fetchNotes()
+    }
+  }
+
+  fetchNotes = async () => {
+    const notes = await API.getNotes()
+    this.setState({ notes: notes, isFetching: false })
   }
 
   handleNoteCreate = (note) => {
     const newNotes = [ ...this.state.notes, note ]
     this.setState({ notes: newNotes })
-    saveNotes(newNotes)
+    // TODO: Save notes
   }
 
   filterNotesByLevel = (notes, level) => {
@@ -48,7 +66,7 @@ class NotesManager extends React.Component {
     const newNotes = this.state.notes.slice()
     newNotes.splice(newNotes.indexOf(note), 1)
     this.setState({ notes: newNotes })
-    saveNotes(newNotes)
+    // TODO: Save notes
   }
 
   saveToJSON = () => {
@@ -60,7 +78,7 @@ class NotesManager extends React.Component {
     if (loadedJSON) {
       const notes = JSON.parse(loadedJSON);
       this.setState({ notes: notes })
-      saveNotes(notes)
+      // TODO: Save notes
     }
   }
 
@@ -106,7 +124,11 @@ class NotesManager extends React.Component {
             {this.createLevelTab(Levels.LOW, 'Low')}
           </ul>
         </div>
-        <NotesList notes={filteredNotes} onNoteDelete={this.handleNoteDelete}/>
+        {
+          (this.state.isFetching)
+          ? <span>Loading...</span>
+          : <NotesList notes={filteredNotes} onNoteDelete={this.handleNoteDelete}/>
+        }
       </div>
     )
   }
