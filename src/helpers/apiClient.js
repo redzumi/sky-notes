@@ -1,31 +1,28 @@
-const DB = [
-  {
-    id: "00d9d442-0d54-4f27-ae30-c1ed6b9c8637",
-    level: 0,
-    text: "12312",
-    timestamp: 1532022012589,
-    title: "asdasd"
-  }
-]
+import axios from 'axios'
 
 class APIClient {
   constructor(options) {
-    this.host = options.host
-    this.port = options.port
+    this.host = options.host || 'localhost'
+    this.port = options.port || 80
+
+    this.api = axios.create({
+      baseURL: `http://${this.host}:${this.port}/api/`,
+    });
   }
 
-  getNotes = () => new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(DB)
-    }, 2000)
-  })
-  
-  saveNote = data => {
-  
+  getNotes = async () => {
+    const res = await this.api.get('/notes')
+    return res.data
   }
   
-  deleteNote = data => {
+  saveNote = async (data) => {
+    const res = await this.api.post('/note', data)
+    return res.data
+  }
   
+  deleteNote = async (data) => {
+    const res = await this.api.delete('/note', data)
+    return res.data
   }
 }
 

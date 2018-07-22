@@ -3,30 +3,38 @@ import express from 'express'
 import React from 'react'
 import fs from 'fs'
 import ReactDOMServer from 'react-dom/server'
+import APIClient from './helpers/apiClient'
 
 import 'babel-polyfill'
 
 const PORT = 3000;
 const PAGE = fs.readFileSync('./index.html', 'utf-8')
+const API = new APIClient({
+  host: 'localhost',
+  port: 3001,
+})
 
 // for prod in webpack is mode: 'production'
 // for prod in SSR is this line
 process.env.NODE_ENV = 'production'
 
-// And for disable styles import on server
-global.window = {}
-global.window.IS_SSR = true
-
 // initial state as example
-global.window.__INITIAL_STATE__ = {
-  isSSR: true,
-  notes: []
+global.window = {}
+
+const loadInitinalState = async () => {
+  const notes = await API.getNotes()
+  global.window.__INITIAL_STATE__ = {
+    notes: notes
+  }
 }
 
-const getRenderedPage = () => {
+const getRenderedPage = async () => {
   const App = require('./components/App').default
   const markup = ReactDOMServer.renderToString(<App />)
   const withMarkup = injectMarkup(PAGE, markup)
+
+  await loadInitinalState()
+
   return injectInitialState(withMarkup)
 }
 
@@ -46,8 +54,8 @@ const injectInitialState = (page) => {
 const app = express()
 
 app.use('/assets', express.static('assets'))
-app.get('/*', (req, res) => {
-  res.send(getRenderedPage())
+app.get('/*', async (req, res) => {
+  res.send(await getRenderedPage())
 })
 
 app.listen(PORT, () => {

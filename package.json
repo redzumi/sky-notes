@@ -2,10 +2,12 @@
   "scripts": {
     "start": "webpack-dev-server --hot --config config/webpack/dev.webpack.config.js --history-api-fallback",
     "build:prod": "cross-env NODE_ENV=production && webpack --config config/webpack/prod.webpack.config.js --history-api-fallback",
-    "prestart:prod": "babel src --presets=@babel/env,@babel/preset-react --plugins=@babel/plugin-proposal-class-properties,transform-regenerator,@babel/plugin-proposal-object-rest-spread --no-babelrc --out-dir build",
+    "prestart:prod": "babel src --presets=@babel/env,@babel/preset-react --plugins=@babel/plugin-proposal-class-properties,css-modules-transform,transform-regenerator,@babel/plugin-proposal-object-rest-spread --no-babelrc --out-dir build",
     "start:prod": "cd build && node server.js",
     "prestart:api": "babel src/api.js --presets=@babel/env --no-babelrc --out-dir build",
-    "start:api": "cd build && node api.js"
+    "start:api": "cd build && node api.js",
+    "ci:prod": "rm -rf build && npm run build:prod && npm run start:prod",
+    "ci:dev": "rm -rf build && npm run start"
   },
   "dependencies": {
     "@babel/cli": "^7.0.0-beta.54",
@@ -14,11 +16,15 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.52",
     "@babel/preset-env": "^7.0.0-beta.51",
     "@babel/preset-react": "^7.0.0-beta.51",
+    "axios": "^0.18.0",
     "babel-loader": "^8.0.0-beta",
+    "babel-plugin-css-modules-transform": "^1.6.1",
     "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-polyfill": "^6.26.0",
+    "body-parser": "^1.18.3",
     "bulma": "^0.7.1",
     "core-js": "^2.5.7",
+    "cors": "^2.8.4",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "express": "^4.16.3",

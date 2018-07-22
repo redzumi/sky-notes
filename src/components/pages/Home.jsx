@@ -2,9 +2,7 @@ import React from 'react'
 
 import NotesManager from '../Notes/NotesManager'
 
-if (!global.window.IS_SSR) {
-  require('./styles.css')
-}
+require('./styles.css')
 
 class Home extends React.Component {
   render () {

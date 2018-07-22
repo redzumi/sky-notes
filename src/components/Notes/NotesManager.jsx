@@ -5,9 +5,7 @@ import CreateNoteForm from '../Notes/CreateNoteForm'
 import APIClient from '../../helpers/apiClient'
 import { Levels } from '../../helpers/constants'
 
-if (!global.window.IS_SSR) {
-  require('./styles.css')
-}
+require('./styles.css')
 
 const API = new APIClient({
   host: 'localhost',
@@ -16,16 +14,14 @@ const API = new APIClient({
 
 class NotesManager extends React.Component {
   state = {
-    notes: [],
-    isFetching: true,
+    notes: (window && window.__INITIAL_STATE__) ? window.__INITIAL_STATE__.notes : [],
+    isFetching: (window && window.__INITIAL_STATE__) ? false : true,
     currentLevel: Levels.HIGH,
     showNoteForm: false,
   }
 
   componentDidMount() {
-    if (window.__INITIAL_STATE__ && window.__INITIAL_STATE__.notes) {
-      this.setState({ notes: window.__INITIAL_STATE__.notes, isFetching: false })
-    } else {
+    if (!window.__INITIAL_STATE__ || !window.__INITIAL_STATE__.notes) {
       this.fetchNotes()
     }
   }
@@ -35,10 +31,11 @@ class NotesManager extends React.Component {
     this.setState({ notes: notes, isFetching: false })
   }
 
-  handleNoteCreate = (note) => {
+  handleNoteCreate = async (note) => {
     const newNotes = [ ...this.state.notes, note ]
-    this.setState({ notes: newNotes })
-    // TODO: Save notes
+    this.setState({ isFetching: true })
+    await API.saveNote(note)
+    this.setState({ notes: newNotes, isFetching: false })
   }
 
   filterNotesByLevel = (notes, level) => {
@@ -62,11 +59,12 @@ class NotesManager extends React.Component {
     this.setState({ showNoteForm: !this.state.showNoteForm })
   }
 
-  handleNoteDelete = (note) => {
+  handleNoteDelete = async (note) => {
     const newNotes = this.state.notes.slice()
     newNotes.splice(newNotes.indexOf(note), 1)
-    this.setState({ notes: newNotes })
-    // TODO: Save notes
+    this.setState({ isFetching: true })
+    await API.deleteNote(note)
+    this.setState({ notes: newNotes, isFetching: false })
   }
 
   saveToJSON = () => {
@@ -78,7 +76,7 @@ class NotesManager extends React.Component {
     if (loadedJSON) {
       const notes = JSON.parse(loadedJSON);
       this.setState({ notes: notes })
-      // TODO: Save notes
+      // TODO: Save new notes state
     }
   }
 

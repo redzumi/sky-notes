@@ -1,4 +1,7 @@
 import express from 'express'
+import cors from 'cors'
+import bodyParser from 'body-parser'
+import uuid from 'uuid'
 
 const PORT = 3001;
 
@@ -14,13 +17,23 @@ const DB = [
 
 const app = express()
 
+app.use(cors())
+app.use(bodyParser.json())
+
 app.get('/api/notes', (req, res) => {
   res.send(JSON.stringify(DB))
 })
 
-app.get('/api/note', (req, res) => {
-  console.log(req.query)
-  res.send('set note')
+app.post('/api/note', (req, res) => {
+  const note = { ...req.body, id: uuid(), timestamp: Date.now() }
+  DB.push(note)
+  res.send({ success: true })
+})
+
+app.delete('/api/note', (req, res) => {
+  const note = req.body
+  DB.splice(DB.indexOf(note), 1)
+  res.send({ success: true })
 })
 
 app.listen(PORT, () => {
