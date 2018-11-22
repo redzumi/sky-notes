@@ -1,4 +1,10 @@
 {
+  "name": "sky-messanger",
+  "version": "1.0.0",
+  "description": "Just a simple messanger",
+  "main": "index.js",
+  "author": "Bykovskikh Evgeny <redzumi.tao@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --hot --config config/webpack/dev.webpack.config.js --history-api-fallback",
     "build:prod": "cross-env NODE_ENV=production && webpack --config config/webpack/prod.webpack.config.js --history-api-fallback",
@@ -7,7 +13,8 @@
     "prestart:api": "babel src/api.js --presets=@babel/env --no-babelrc --out-dir build",
     "start:api": "cd build && node api.js",
     "ci:prod": "rm -rf build && npm run build:prod && npm run start:prod",
-    "ci:dev": "rm -rf build && npm run start"
+    "ci:dev": "rm -rf build && npm run start",
+    "lint": "eslint --ext .js --ext .jsx src"
   },
   "dependencies": {
     "@babel/cli": "^7.0.0-beta.54",
@@ -43,10 +50,11 @@
     "webpack-dev-server": "^3.1.4",
     "write-file-webpack-plugin": "^4.3.2"
   },
-  "name": "sky-messanger",
-  "version": "1.0.0",
-  "description": "Just a simple messanger",
-  "main": "index.js",
-  "author": "Bykovskikh Evgeny <redzumi.tao@gmail.com>",
-  "license": "MIT"
+  "devDependencies": {
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb": "17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.0"
+  }
 }
