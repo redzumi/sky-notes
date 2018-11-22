@@ -27,6 +27,10 @@ app.get('/api/notes', (req, res) => {
 app.post('/api/note', (req, res) => {
   const note = { ...req.body, id: uuid(), timestamp: Date.now() };
   DB.push(note);
+
+  // eslint-disable-next-line
+  console.log(`note added, db now: ${JSON.stringify(DB)}`);
+
   res.send({ success: true });
 });
 
