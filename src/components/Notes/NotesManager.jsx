@@ -51,7 +51,7 @@ class NotesManager extends React.Component {
     const className = currentLevel === level ? 'is-active' : '';
     return (
       <button
-        className={className}
+        className={`button is-small ${className}`}
         onClick={() => this.handleLevelChange(level)}
       >
         <b>{text}</b>

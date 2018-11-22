@@ -1,7 +1,3 @@
-.notes__level {
-  display: flex;
-  flex-direction: column;
-  max-height: 400px;
-  overflow: scroll;
-  padding-top: 25px;
+.tabs ul {
+  border: none;
 }
