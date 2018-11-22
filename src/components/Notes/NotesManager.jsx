@@ -14,7 +14,8 @@ const API = new APIClient({
 
 class NotesManager extends React.Component {
   state = {
-    notes: window && window.__INITIAL_STATE__ ? window.__INITIAL_STATE__.notes : [],
+    notes:
+      window && window.__INITIAL_STATE__ ? window.__INITIAL_STATE__.notes : [],
     isFetching: !(window && window.__INITIAL_STATE__),
     currentLevel: Levels.HIGH,
     showNoteForm: false,
@@ -39,13 +40,20 @@ class NotesManager extends React.Component {
     this.setState({ notes: newNotes, isFetching: false });
   };
 
-  filterNotesByLevel = (notes, level) => notes.filter(note => note.level === level);
+  getNotesByLevel = (level) => {
+    const { notes } = this.state;
+    const filteredNotes = notes.filter(note => parseInt(note.level) === level);
+    return filteredNotes;
+  };
 
   createLevelTab = (level, text) => {
     const { currentLevel } = this.state;
     const className = currentLevel === level ? 'is-active' : '';
     return (
-      <button className={className} onClick={() => this.handleLevelChange(level)}>
+      <button
+        className={className}
+        onClick={() => this.handleLevelChange(level)}
+      >
         <b>{text}</b>
       </button>
     );
@@ -92,7 +100,7 @@ class NotesManager extends React.Component {
       return <span>Ooops, something went wrong....</span>;
     }
 
-    const filteredNotes = this.filterNotesByLevel(notes, currentLevel);
+    const filteredNotes = this.getNotesByLevel(currentLevel);
 
     return (
       <div>
@@ -127,7 +135,10 @@ class NotesManager extends React.Component {
         {isFetching ? (
           <span>Loading...</span>
         ) : (
-          <NotesList notes={filteredNotes} onNoteDelete={this.handleNoteDelete} />
+          <NotesList
+            notes={filteredNotes}
+            onNoteDelete={this.handleNoteDelete}
+          />
         )}
       </div>
     );

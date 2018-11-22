@@ -7,7 +7,8 @@
   },
   "rules": {
     "semi": "off",
-    "max-len": ["error", { "code": 90 }],
+    "radix": "off",
+    "max-len": ["error", { "code": 80 }],
     "no-unused-expressions": "off",
     "no-underscore-dangle": "off",
     "jsx-a11y/label-has-associated-control": "off",

@@ -44,4 +44,5 @@ module.exports = {
     compress: true,
     disableHostCheck: true,
   },
+  devtool: 'cheap-module-eval-source-map',
 };
