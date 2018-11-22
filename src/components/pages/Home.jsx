@@ -1,19 +1,15 @@
-import React from 'react'
+import React from 'react';
 
-import NotesManager from '../Notes/NotesManager'
+import NotesManager from '../Notes/NotesManager';
 
-require('./styles.css')
+import './styles.css';
 
-class Home extends React.Component {
-  render () {
-    return(
-      <section className="section">
-        <div className="container page__container">
-          <NotesManager />
-        </div>
-      </section>
-    )
-  }
-}
+const Home = () => (
+  <section className='section'>
+    <div className='container page__container'>
+      <NotesManager />
+    </div>
+  </section>
+);
 
-export default Home
+export default Home;

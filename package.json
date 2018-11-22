@@ -24,6 +24,7 @@
     "@babel/preset-env": "^7.0.0-beta.51",
     "@babel/preset-react": "^7.0.0-beta.51",
     "axios": "^0.18.0",
+    "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.0-beta",
     "babel-plugin-css-modules-transform": "^1.6.1",
     "babel-plugin-transform-regenerator": "^6.26.0",

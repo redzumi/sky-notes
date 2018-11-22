@@ -1,52 +1,52 @@
 {
-    "plugins": [
-        "@babel/plugin-proposal-class-properties",
-        "@babel/plugin-proposal-object-rest-spread",
-        "react-hot-loader/babel",
-        "transform-regenerator"
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread",
+    "react-hot-loader/babel",
+    "transform-regenerator"
+  ],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "targets": {
+          "browsers": [
+            "last 2 versions",
+            "not ie < 12",
+            "not android < 5",
+            "> 5% in RU"
+          ]
+        },
+        "useBuiltIns": "usage",
+        "debug": false,
+        "shippedProposals": true
+      }
     ],
-    "presets": [
+    "@babel/preset-react"
+  ],
+  "env": {
+    "test": {
+      "presets": [
         [
-            "@babel/preset-env",
-            {
-                "modules": false,
-                "targets": {
-                    "browsers": [
-                        "last 2 versions",
-                        "not ie < 12",
-                        "not android < 5",
-                        "> 5% in RU"
-                    ]
-                },
-                "useBuiltIns": "usage",
-                "debug": false,
-                "shippedProposals": true
-            }
+          "@babel/preset-env",
+          {
+            "modules": "commonjs",
+            "targets": {
+              "browsers": [
+                "last 2 versions",
+                "not ie < 12",
+                "not android < 5",
+                "> 5% in RU"
+              ]
+            },
+            "useBuiltIns": "usage",
+            "debug": true,
+            "shippedProposals": true
+          }
         ],
         "@babel/preset-react"
-    ],
-    "env": {
-        "test": {
-            "presets": [
-                [
-                    "@babel/preset-env",
-                    {
-                        "modules": "commonjs",
-                        "targets": {
-                            "browsers": [
-                                "last 2 versions",
-                                "not ie < 12",
-                                "not android < 5",
-                                "> 5% in RU"
-                            ]
-                        },
-                        "useBuiltIns": "usage",
-                        "debug": true,
-                        "shippedProposals": true
-                    }
-                ],
-                "@babel/preset-react"
-            ]
-        }
+      ]
     }
   }
+}
