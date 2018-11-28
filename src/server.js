@@ -5,7 +5,7 @@ import fs from 'fs';
 import ReactDOMServer from 'react-dom/server';
 import APIClient from './helpers/apiClient';
 
-import 'babel-polyfill';
+import '@babel/polyfill';
 
 const PORT = 3000;
 const PAGE = fs.readFileSync('./index.html', 'utf-8');
