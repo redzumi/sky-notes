@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 
 import React from 'react';
 import fs from 'fs';
@@ -56,6 +57,8 @@ const getRenderedPage = async () => {
 };
 
 const app = express();
+
+app.use(compression());
 
 app.use('/assets', express.static('assets'));
 app.get('/*', async (req, res) => {

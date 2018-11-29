@@ -7,7 +7,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: ['@babel/polyfill', path.resolve(__dirname, '../../src/index.jsx')],
+  entry: [
+    '@babel/polyfill',
+    path.resolve(__dirname, '../../src/vendors.js'),
+    path.resolve(__dirname, '../../src/index.jsx'),
+  ],
   output: {
     path: path.resolve(__dirname, '../../build'),
     filename: 'bundle.[hash].js',
@@ -19,7 +23,7 @@ module.exports = {
     rules: [
       {
         test: /\.js(x?)$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(node_modules)/,
         use: ['babel-loader'],
       },
       {
@@ -39,6 +43,17 @@ module.exports = {
       chunkFilename: '[id].css',
     }),
   ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'third_party',
+          chunks: 'all',
+        },
+      },
+    },
+  },
   devServer: {
     contentBase: path.resolve(__dirname, '../../build'),
     compress: true,
