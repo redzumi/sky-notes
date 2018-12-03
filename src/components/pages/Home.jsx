@@ -1,15 +1,21 @@
 import React from 'react';
 
+import { Layout } from 'antd';
+
+import Header from '../Page/Header';
+import Content from '../Page/Content';
+import Footer from '../Page/Footer';
+
 import NotesManager from '../Notes/NotesManager';
 
-import './styles.css';
-
 const Home = () => (
-  <section className='section'>
-    <div className='container page__container'>
+  <Layout>
+    <Header />
+    <Content>
       <NotesManager />
-    </div>
-  </section>
+    </Content>
+    <Footer />
+  </Layout>
 );
 
 export default Home;

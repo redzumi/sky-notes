@@ -1,1 +1,1 @@
-import 'bulma/css/bulma.min.css';
+import 'antd/dist/antd.min.css';

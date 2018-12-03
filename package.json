@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
+    "antd": "^3.11.0",
     "axios": "^0.18.0",
     "babel-plugin-css-modules-transform": "^1.6.2",
     "body-parser": "^1.18.3",
@@ -32,7 +33,6 @@
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "style-loader": "0.23.1",
     "styled-components": "^4.1.2",
     "uuid": "^3.3.2",
     "webpack": "^4.26.1",

@@ -5,8 +5,6 @@ import CreateNoteForm from './CreateNoteForm';
 import APIClient from '../../helpers/apiClient';
 import { Levels } from '../../helpers/constants';
 
-import './styles.css';
-
 const API = new APIClient({
   host: 'localhost',
   port: 3001,

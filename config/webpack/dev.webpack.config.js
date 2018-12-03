@@ -28,7 +28,17 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        include: /[\\/]node_modules[\\/]/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      {
+        test: /\.css$/,
+        exclude: /[\\/]node_modules[\\/]/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          // eslint-disable-next-line
+          'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+        ],
       },
     ],
   },
@@ -53,6 +63,10 @@ module.exports = {
         },
       },
     },
+  },
+  watchOptions: {
+    aggregateTimeout: 150,
+    poll: 500,
   },
   devServer: {
     contentBase: path.resolve(__dirname, '../../build'),
