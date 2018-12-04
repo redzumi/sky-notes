@@ -1,20 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Col, Row } from 'antd';
 import Note from './Note';
 
+import styles from './styles.css';
+
 const NotesList = ({ notes, onNoteDelete }) => (notes.length > 0 ? (
-  notes.map(note => (
-    <Note
-      key={note.id}
-      data={note}
-      onNoteDelete={() => {
-        onNoteDelete(note);
-      }}
-    />
-  ))
+  <Row gutter={16}>
+    {notes.map(note => (
+      <Col span={8} xs={24} md={8} key={note.id}>
+        <Note
+          data={note}
+          onNoteDelete={() => {
+            onNoteDelete(note);
+          }}
+        />
+      </Col>
+    ))}
+  </Row>
 ) : (
-  <span>List is empty...</span>
+  <div className={styles.empty}>Nothing...</div>
 ));
 
 NotesList.propTypes = {

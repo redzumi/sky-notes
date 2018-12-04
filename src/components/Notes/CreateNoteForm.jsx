@@ -1,13 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import {
+  Form, Radio, Input, Button,
+} from 'antd';
 import { Levels } from '../../helpers/constants';
+
+const FormItem = Form.Item;
+const { TextArea } = Input;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
+
+const formItemLayout = {
+  labelCol: { span: 6 },
+  wrapperCol: { span: 14 },
+};
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+    md: {
+      offset: 6,
+    },
+  },
+};
 
 class CreateNoteForm extends React.Component {
   state = {
     title: '',
-    level: Levels.HIGH,
     text: '',
+    level: Levels.HIGH,
   };
 
   handleValueChange = ({ target }) => {
@@ -26,66 +55,42 @@ class CreateNoteForm extends React.Component {
   };
 
   render() {
-    const { title, text } = this.state;
+    const { title, text, level } = this.state;
     return (
-      <form className='notification' onSubmit={this.handleFormSubmit}>
-        <div className='field'>
-          <label className='label'>Title</label>
-          <div className='control'>
-            <input
-              className='input'
-              type='text'
-              placeholder='Title'
-              name='title'
-              value={title}
-              onChange={this.handleValueChange}
-            />
-          </div>
-        </div>
-
-        <div className='field'>
-          <label className='label'>Level</label>
-          <div className='control'>
-            <div className='select'>
-              <select name='level' onChange={this.handleValueChange}>
-                <option value={Levels.HIGH}>High</option>
-                <option value={Levels.MIDDLE}>Middle</option>
-                <option value={Levels.LOW}>Low</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div className='field'>
-          <label className='label'>Text</label>
-          <div className='control'>
-            <textarea
-              className='textarea'
-              placeholder='Text'
-              name='text'
-              value={text}
-              onChange={this.handleValueChange}
-            />
-          </div>
-        </div>
-
-        <div className='field is-grouped'>
-          <div className='control'>
-            <button className='button is-link' type='submit'>
-              Submit
-            </button>
-          </div>
-          <div className='control'>
-            <button
-              className='button is-text'
-              type='button'
-              onClick={this.handleFormCancel}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </form>
+      <Form onSubmit={this.handleFormSubmit}>
+        <FormItem {...formItemLayout} label='Title'>
+          <Input
+            placeholder='Basic usage'
+            value={title}
+            name='title'
+            onChange={this.handleValueChange}
+          />
+        </FormItem>
+        <FormItem {...formItemLayout} label='Text'>
+          <TextArea
+            rows={4}
+            value={text}
+            name='text'
+            onChange={this.handleValueChange}
+          />
+        </FormItem>
+        <FormItem {...formItemLayout} label='Level'>
+          <RadioGroup
+            defaultValue={level}
+            name='level'
+            onChange={this.handleValueChange}
+          >
+            <RadioButton value={Levels.HIGH}>High</RadioButton>
+            <RadioButton value={Levels.MIDDLE}>Middle</RadioButton>
+            <RadioButton value={Levels.LOW}>Low</RadioButton>
+          </RadioGroup>
+        </FormItem>
+        <FormItem {...tailFormItemLayout}>
+          <Button type='primary' htmlType='submit'>
+            Create
+          </Button>
+        </FormItem>
+      </Form>
     );
   }
 }

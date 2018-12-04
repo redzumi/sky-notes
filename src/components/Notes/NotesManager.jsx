@@ -1,9 +1,14 @@
 import React from 'react';
 
+import {
+  Tabs, Spin, Divider, Button,
+} from 'antd';
 import NotesList from './NotesList';
 import CreateNoteForm from './CreateNoteForm';
 import APIClient from '../../helpers/apiClient';
 import { Levels } from '../../helpers/constants';
+
+const { TabPane } = Tabs;
 
 const API = new APIClient({
   host: 'localhost',
@@ -14,9 +19,8 @@ class NotesManager extends React.Component {
   state = {
     notes:
       window && window.__INITIAL_STATE__ ? window.__INITIAL_STATE__.notes : [],
-    isFetching: !(window && window.__INITIAL_STATE__),
-    currentLevel: Levels.HIGH,
-    showNoteForm: false,
+    fetching: !(window && window.__INITIAL_STATE__),
+    creating: false,
   };
 
   componentDidMount() {
@@ -27,118 +31,76 @@ class NotesManager extends React.Component {
 
   fetchNotes = async () => {
     const notes = await API.getNotes();
-    this.setState({ notes, isFetching: false });
+    this.setState({ notes, fetching: false });
   };
 
-  handleNoteCreate = async (note) => {
+  toggleCreatingForm = () => {
+    const { creating } = this.state;
+    this.setState({ creating: !creating });
+  };
+
+  createNote = async (note) => {
     const { notes } = this.state;
-    const newNotes = [...notes, note];
-    this.setState({ isFetching: true });
+    this.setState({ fetching: true, creating: false });
     await API.saveNote(note);
-    this.setState({ notes: newNotes, isFetching: false });
+    this.setState({ notes: [...notes, note], fetching: false });
   };
 
-  getNotesByLevel = (level) => {
-    const { notes } = this.state;
-    const filteredNotes = notes.filter(note => parseInt(note.level) === level);
-    return filteredNotes;
-  };
-
-  createLevelTab = (level, text) => {
-    const { currentLevel } = this.state;
-    const className = currentLevel === level ? 'is-active' : '';
-    return (
-      <button
-        className={`button is-small ${className}`}
-        onClick={() => this.handleLevelChange(level)}
-      >
-        <b>{text}</b>
-      </button>
-    );
-  };
-
-  handleLevelChange = (level) => {
-    this.setState({ currentLevel: level });
-  };
-
-  handleToggleNoteForm = () => {
-    const { showNoteForm } = this.state;
-    this.setState({ showNoteForm: !showNoteForm });
-  };
-
-  handleNoteDelete = async (note) => {
+  deleteNote = async (note) => {
     const { notes } = this.state;
     const newNotes = notes.slice();
     newNotes.splice(newNotes.indexOf(note), 1);
-    this.setState({ isFetching: true });
+    this.setState({ fetching: true });
     await API.deleteNote(note);
-    this.setState({ notes: newNotes, isFetching: false });
+    this.setState({ notes: newNotes, fetching: false });
   };
 
-  saveToJSON = () => {
-    // const { notes } = this.state;
-    // window.prompt('Copy your JSON:', JSON.stringify(notes));
-  };
-
-  loadFromJSON = () => {
-    // const loadedJSON = window.prompt('Your JSON:');
-    // if (loadedJSON) {
-    //   const notes = JSON.parse(loadedJSON);
-    //   this.setState({ notes });
-    //   // TODO: Save new notes state
-    // }
+  renderLevelNotes = (level) => {
+    const { notes, fetching } = this.state;
+    const levelNotes = notes.filter(note => parseInt(note.level) === level);
+    return (
+      <Spin spinning={fetching} delay={500}>
+        <NotesList notes={levelNotes} onNoteDelete={this.deleteNote} />
+      </Spin>
+    );
   };
 
   render() {
-    const {
-      notes, currentLevel, showNoteForm, isFetching,
-    } = this.state;
+    const { notes, creating } = this.state;
 
     if (!notes || typeof notes !== 'object') {
       return <span>Ooops, something went wrong....</span>;
     }
 
-    const filteredNotes = this.getNotesByLevel(currentLevel);
-
     return (
-      <div>
-        <div className='level'>
-          <div className='level-left'>
-            <button className='button' onClick={this.handleToggleNoteForm}>
-              {showNoteForm ? 'Cancel' : 'Add'}
-            </button>
-          </div>
-          <div className='level-right'>
-            <button className='button level-item' onClick={this.loadFromJSON}>
-              Load
-            </button>
-            <button className='button level-item' onClick={this.saveToJSON}>
-              Save
-            </button>
-          </div>
-        </div>
-        {showNoteForm && (
+      <React.Fragment>
+        <Button
+          icon={creating ? 'rollback' : 'plus'}
+          type={creating ? 'danger' : 'dashed'}
+          onClick={this.toggleCreatingForm}
+        >
+          {creating ? 'Cancel' : 'Create new'}
+        </Button>
+        <Divider />
+        {creating ? (
           <CreateNoteForm
-            onNoteCreated={this.handleNoteCreate}
-            onCreationCanceled={this.handleToggleNoteForm}
+            onNoteCreated={this.createNote}
+            onCreationCanceled={this.toggleCreatingForm}
           />
-        )}
-        <div className='tabs is-centered'>
-          <ul>
-            {this.createLevelTab(Levels.HIGH, 'High')}
-            {this.createLevelTab(Levels.MIDDLE, 'Middle')}
-            {this.createLevelTab(Levels.LOW, 'Low')}
-          </ul>
-        </div>
-        {isFetching ? (
-          <span>Loading...</span>
         ) : (
-          <NotesList
-            notes={filteredNotes}
-            onNoteDelete={this.handleNoteDelete}
-          />
+          <Tabs defaultActiveKey='1'>
+            <TabPane tab='High' key='1'>
+              {this.renderLevelNotes(Levels.HIGH)}
+            </TabPane>
+            <TabPane tab='Middle' key='2'>
+              {this.renderLevelNotes(Levels.MIDDLE)}
+            </TabPane>
+            <TabPane tab='Low' key='3'>
+              {this.renderLevelNotes(Levels.LOW)}
+            </TabPane>
+          </Tabs>
         )}
-      </div>
+      </React.Fragment>
     );
   }
 }

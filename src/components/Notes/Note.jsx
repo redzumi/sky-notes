@@ -1,41 +1,41 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-const NAME = 'Evgeny';
-const LOGIN = '@redzumi';
+import { Card, Button } from 'antd';
 
-const Note = ({ data, onNoteDelete }) => (
-  <div className='box'>
-    <article className='media'>
-      <div className='media-content'>
-        <div className='content'>
-          <div className='level'>
-            <p>
-              <strong>{NAME} </strong>
-              <small>{LOGIN}</small>
-              <br />
-              <b>{data.title}</b>
-              <br />
-              {data.text}
-            </p>
-          </div>
-          <div className='level'>
-            <button className='button' type='button' onClick={onNoteDelete}>
-              <span>
-                <i className='fas fa-trash' />
-                Delete
-              </span>
-            </button>
-          </div>
-        </div>
+import styles from './styles.css';
+
+export default class Note extends PureComponent {
+  renderCardPanel = () => {
+    const { onNoteDelete } = this.props;
+    return (
+      <React.Fragment>
+        <Button
+          icon='delete'
+          style={{ color: '#f5222d' }}
+          onClick={onNoteDelete}
+        />
+      </React.Fragment>
+    );
+  };
+
+  render() {
+    const { data } = this.props;
+    return (
+      <div className={styles.note}>
+        <Card
+          title={data.title}
+          bordered={false}
+          extra={this.renderCardPanel()}
+        >
+          <p>{data.text}</p>
+        </Card>
       </div>
-    </article>
-  </div>
-);
+    );
+  }
+}
 
 Note.propTypes = {
   data: PropTypes.object.isRequired,
   onNoteDelete: PropTypes.func.isRequired,
 };
-
-export default Note;
