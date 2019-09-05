@@ -14,6 +14,17 @@ const API = new APIClient({
   port: 3001,
 })
 
+/*
+pipline: 
+1. load without initial state
+2. non global vars for initial state
+3. handle get request
+4. create initial state for request
+5. render App with global initial state
+6. inject this into page
+7. done?
+*/
+
 // for prod in webpack is mode: 'production'
 // for prod in SSR is this line
 process.env.NODE_ENV = 'production'
@@ -30,7 +41,8 @@ const loadInitinalState = async () => {
 
 const getRenderedPage = async () => {
   const App = require('./components/App').default
-  const markup = ReactDOMServer.renderToString(<App />)
+  const renderWithWindow = ReactDOMServer.renderToString.bind({ test: 123 });
+  const markup = renderWithWindow(<App />)
   const withMarkup = injectMarkup(PAGE, markup)
 
   await loadInitinalState()

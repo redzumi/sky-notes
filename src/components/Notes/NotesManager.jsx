@@ -91,6 +91,7 @@ class NotesManager extends React.Component {
     
     return(
       <div>
+        test: {window.test}
         <div className="level">
           <div className="level-left">
             <button
